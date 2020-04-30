@@ -6,6 +6,7 @@
         "core-js": "^3.0.0",
         "eslint": "^6.8.0",
         "eslint-plugin-react": "^7.19.0",
+        "prop-types": "^15.7.2",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "regenerator-runtime": "^0.13.2",
@@ -18,5 +19,8 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "recharts": "^1.8.5"
     }
 }
