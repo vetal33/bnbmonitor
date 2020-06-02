@@ -2,9 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"},
+ *     normalizationContext={"groups"={"flow:read"}},
+ *     attributes={
+ *          "pagination_items_per_page"=10,
+ *          "order"={"id": "DESC"}
+ *     }
+ * )
+ * @ApiFilter(SearchFilter::class, properties={
+ *      "coin":"exact"
+ *     })
  * @ORM\Entity(repositoryClass="App\Repository\FlowRepository")
  */
 class Flow
@@ -13,21 +30,25 @@ class Flow
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"flow:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"flow:read"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"flow:read"})
      */
     private $volume;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"flow:read"})
      */
     private $numberTrades;
 
@@ -38,6 +59,7 @@ class Flow
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"flow:read"})
      */
     private $endOfInterval;
 
@@ -49,6 +71,7 @@ class Flow
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Coin", inversedBy="flows")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"flow:read"})
      */
     private $coin;
 
@@ -116,6 +139,20 @@ class Flow
 
         return $this;
     }
+
+    /**
+     * End of interval in hours and minutes
+     *
+     * @Groups({"flow:read"})
+     */
+    public function getTimeInStr(): string
+    {
+        $date = $this->getEndOfInterval();
+        $date->modify('+1 second');
+
+        return $date->format('H:i');
+    }
+
 
     public function getReceivedAt(): ?\DateTimeInterface
     {

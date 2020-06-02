@@ -31,7 +31,8 @@ class BinanceCoinHandler
         return $this->coinRepository->findBy(['isActive' => true]);
     }
 
-    public function getPrices()
+    public function
+    getPrices()
     {
         $prices = [];
         $coins = $this->getAllCoins();
