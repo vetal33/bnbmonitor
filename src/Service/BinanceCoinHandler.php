@@ -31,14 +31,14 @@ class BinanceCoinHandler
         return $this->coinRepository->findBy(['isActive' => true]);
     }
 
-    public function
-    getPrices()
+    public function getPrices()
     {
         $prices = [];
         $coins = $this->getAllCoins();
 
         foreach ($coins as $coin) {
-            $symbol = $coin->getShortName() . 'USDT';
+            $shortName = $coin->getShortName();
+            $symbol = $shortName . 'USDT';
             $res = $this->client->request('GET', 'https://api.binance.com/api/v3/ticker/price', [
                 'query' => [
                     'symbol' => $symbol,
@@ -47,8 +47,7 @@ class BinanceCoinHandler
 
             if ($res->getStatusCode() === 200) {
                 $price = $res->toArray();
-                $symbolCut = rtrim($price['symbol'], 'USDT');
-                $prices[$symbolCut]['price'] = $price['price'];
+                $prices[$shortName]['price'] = $price['price'];
             }
         }
 
