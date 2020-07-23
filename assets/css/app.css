@@ -3,3 +3,9 @@
 .info {
     background-color: #ffefed !important;
 }
+.currency-table {
+    max-height: 590px;
+    display: block;
+    overflow-y: scroll;
+}
+

@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={"get"},
  *     normalizationContext={"groups"={"flow:read"}},
  *     attributes={
- *          "pagination_items_per_page"=10,
+ *          "pagination_items_per_page"=20,
  *          "order"={"id": "DESC"}
  *     }
  * )

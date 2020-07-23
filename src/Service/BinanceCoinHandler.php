@@ -5,7 +5,7 @@ namespace App\Service;
 
 
 use App\Repository\CoinRepository;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\FlowRepository;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
@@ -19,11 +19,16 @@ class BinanceCoinHandler
      * @var HttpClientInterface
      */
     private $client;
+    /**
+     * @var FlowRepository
+     */
+    private $flowRepository;
 
-    public function __construct(CoinRepository $coinRepository, HttpClientInterface $client)
+    public function __construct(CoinRepository $coinRepository, HttpClientInterface $client, FlowRepository $flowRepository)
     {
         $this->coinRepository = $coinRepository;
         $this->client = $client;
+        $this->flowRepository = $flowRepository;
     }
 
     private function getAllCoins(): array
@@ -70,7 +75,7 @@ class BinanceCoinHandler
             ]);
 
             if ($res->getStatusCode() === 200) {
-                $price =$res->toArray();
+                $price = $res->toArray();
                 $coins[$coinShortName]['value'] = $price[0][7];
                 $coins[$coinShortName]['numberOfTrades'] = $price[0][8];
                 $coins[$coinShortName]['interval'] = $interval;
@@ -89,6 +94,17 @@ class BinanceCoinHandler
         }
 
         return $coins;
+    }
+
+    public function getLastPrices(int $count)
+    {
+        $resArr = $this->flowRepository->getLastPrices($count);
+        $currencyRes = [];
+        foreach ($resArr as $res){
+            $currencyRes[$res['shortName']] = $res['price'];
+        }
+
+        return $currencyRes;
     }
 
 }

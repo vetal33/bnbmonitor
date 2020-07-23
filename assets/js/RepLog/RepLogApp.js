@@ -47,8 +47,7 @@ export default class RepLogApp extends Component {
                         }
                     })
                 });
-                console.log(data);
-                this.getCoinName(data[0]);
+                this.getCoinName(data);
             });
         this.setState({
             highlightedRowId: repLogId,

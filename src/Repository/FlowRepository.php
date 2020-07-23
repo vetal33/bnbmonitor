@@ -19,6 +19,20 @@ class FlowRepository extends ServiceEntityRepository
         parent::__construct($registry, Flow::class);
     }
 
+    public function getLastPrices(int $count)
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->select('f.price', 'c.shortName')
+            ->innerJoin('f.coin', 'c', 'with', 'c.id = f.coin')
+            ->orderBy('f.id', 'DESC')
+            ->setMaxResults($count);
+
+        $res = $qb->getQuery()->getResult();
+
+        return $res;
+    }
+
+
     // /**
     //  * @return Flow[] Returns an array of Flow objects
     //  */

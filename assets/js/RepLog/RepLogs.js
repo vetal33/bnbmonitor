@@ -19,7 +19,7 @@ export default function RepLogs(props) {
     } = props;
     //const calculateTotalWeightFancier = repLogs => repLogs.reduce((total, log) => total + log.price, 0);
     return (
-        <div>
+        <div className="currency-table">
             <div>List of currencies</div>
             <table className="table table-sm">
                 <thead>

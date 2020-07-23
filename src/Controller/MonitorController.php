@@ -6,6 +6,7 @@ use App\Entity\Coin;
 use App\Entity\Flow;
 use App\Repository\CoinRepository;
 use App\Service\BinanceCoinHandler;
+use App\Service\TelegramBotHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,16 @@ class MonitorController extends AbstractController
      * @var BinanceCoinHandler
      */
     private $binanceCoinHandler;
+    /**
+     * @var TelegramBotHandler
+     */
+    private $telegramBotHandler;
 
-    public function __construct(BinanceCoinHandler $binanceCoinHandler)
+
+    public function __construct(BinanceCoinHandler $binanceCoinHandler, TelegramBotHandler $telegramBotHandler)
     {
         $this->binanceCoinHandler = $binanceCoinHandler;
+        $this->telegramBotHandler = $telegramBotHandler;
     }
 
     /**
@@ -29,14 +36,22 @@ class MonitorController extends AbstractController
      */
     public function index()
     {
-        /*$prices = $this->binanceCoinHandler->getPrices();
-        dump($prices);
-        $prices = $this->binanceCoinHandler->getValuesByPeriod($prices, 15);
-        dump($prices);*/
+
         return $this->render('monitor/index.html.twig', [
             'controller_name' => 'MonitorController',
         ]);
     }
+
+    /**
+     * @Route("/test", name="test")
+     */
+    public function test()
+    {
+        $this->telegramBotHandler->test();
+
+        return new Response('test');
+    }
+
 
     /**
      * @Route("/save", name="coin_save", methods={"GET"})
